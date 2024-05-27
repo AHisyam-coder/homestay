@@ -3,20 +3,24 @@ import Image from "next/image";
 
 export default function HeaderInfo() {
   return (
-    <div className="flex justify-around">
-      <div className="grid grid-rows-2 grid-flow-col gap-2 pt-6">
-        <div className="flex items-center justify-center row-span-3">
-          <div className="flex items-center justify-center w-12 h-12 border-4 border-blue-800 rounded-full">
-            <Mail className="text-blue-800 " />
+    <div className="flex flex-col justify-center items-center md:flex-row md:justify-around ">
+      <div className=" grid grid-cols-3 items-center gap-4">
+        <div className="flex items-center justify-center col-span-1">
+          <div className="flex items-center justify-center w-12 h-12 border-2 border-secondary rounded-full">
+            <Mail className="text-secondary" />
           </div>
         </div>
-        <div className="col-span-2 content-end">Email Us</div>
-        <div className="row-span-2 col-span-2">example@example.com</div>
+        <div className="col-span-2">
+          <dt className="text-gray-500">Email Us</dt>
+          <dd className="font-medium text-lg text-gray-900 text-secondary">example@example.com</dd>
+        </div>
       </div>
-      <div>
-        <Image src="/logo.png" alt="logo" width={150} height={150} />
+      <div className="pt-6 md:pt-0">
+        <Image src="/Home.png" alt="logo" width={150} height={150} />
       </div>
-      <div className="pt-6">+(60) 12-3456789</div>
+      <div className="text-center md:text-left">
+        <h1 className="text-2xl font-bold text-secondary">+(60) 12-3456789</h1>
+      </div>
     </div>
   );
 }

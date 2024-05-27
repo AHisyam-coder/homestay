@@ -13,7 +13,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="inset-x-0 top-0 z-50 bg-gradient-to-t from-blue-50 to-blue-400">
+    <header className="inset-x-0 top-0 z-50 bg-gradient-to-t from-blue-300 to-primary ">
       <nav
         className="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -45,14 +45,14 @@ export default function Header() {
             <a
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 bg-clip-text  bg-gradient-to-b from-neutral-50 to-neutral-400"
+              className="text-sm font-semibold leading-6 text-primary-foreground"
             >
               {item.name}
             </a>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 bg-clip-text  bg-gradient-to-b from-neutral-50 to-neutral-400">
+          <a href="#" className="text-sm font-semibold leading-6 text-slate-100">
             Log in <span aria-hidden="true">&rarr;</span> 
           </a>
         </div>
