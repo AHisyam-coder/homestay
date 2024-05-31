@@ -5,21 +5,20 @@ import { useState } from "react";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Accommodation", href: "/accomodation" },
-  { name: "Review", href: "/review" },
+  { name: "Accommodation", href: "/accommodation" }
 ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="inset-x-0 top-0 z-50 bg-gradient-to-t from-blue-300 to-primary ">
+    <header className="inset-x-0 top-0 z-50 bg-gradient-to-t from-blue-300 to-primary">
       <nav
-        className="flex items-center justify-between p-6 lg:px-8"
+        className="flex items-center justify-center p-6 lg:px-8"
         aria-label="Global"
       >
-        <div className="flex lg:flex-1">
-          {/* <Link href="#" className="-m-1.5 p-1.5">
+        {/* <div className="flex lg:flex-1">
+          <Link href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <Image
               className="h-8 w-auto"
@@ -28,8 +27,8 @@ export default function Header() {
               width={50}
               height={50}
             />
-          </Link> */}
-        </div>
+          </Link>
+        </div> */}
         <div className="flex lg:hidden">
           <button
             type="button"
@@ -51,11 +50,11 @@ export default function Header() {
             </a>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        {/* <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="#" className="text-sm font-semibold leading-6 text-slate-100">
             Log in <span aria-hidden="true">&rarr;</span> 
           </a>
-        </div>
+        </div> */}
       </nav>
       {/* <Dialog
         className="lg:hidden"

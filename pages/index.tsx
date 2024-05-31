@@ -28,6 +28,25 @@ export default function Home() {
     "https://images.unsplash.com/photo-1482189349482-3defd547e0e9?q=80&w=2848&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   ];
 
+  const states = [
+    "Johor",
+    "Kedah",
+    "Kelantan",
+    "Melaka",
+    "Negeri Sembilan",
+    "Pahang",
+    "Perak",
+    "Perlis",
+    "Pulau Pinang",
+    "Sarawak",
+    "Selangor",
+    "Terengganu",
+    "Kuala Lumpur",
+    "Labuan",
+    "Sabah",
+    "Putrajaya",
+  ];
+
   return (
     <div>
       <ImagesSlider className="h-[40rem]" images={images}>
@@ -57,11 +76,25 @@ export default function Home() {
           </motion.p>
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto pt-14">
             <div className="w-full md:w-auto">
+              <Select>
+                <SelectTrigger className="w-[258px] h-[44px]">
+                  <SelectValue placeholder="Location" />
+                </SelectTrigger>
+                <SelectContent>
+                  {states.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-full md:w-auto">
               <DateRangePicker />
             </div>
             <div className="w-full md:w-auto">
               <Select>
-                <SelectTrigger className="w-[280px] h-[44px]">
+                <SelectTrigger className="w-[258px] h-[44px]">
                   <SelectValue placeholder="Select a room/package" />
                 </SelectTrigger>
                 <SelectContent>

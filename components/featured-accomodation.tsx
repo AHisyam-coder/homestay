@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { DirectionAwareHover } from "./ui/direction-aware-hover";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export function FeaturedAccomodation() {
   return (
@@ -18,9 +19,11 @@ export function FeaturedAccomodation() {
           <h3 className="text-base font-bold tracking-tight text-neutral-300 sm:text-lg mt-4">
             Choose From Wide Range of Our Rooms
           </h3>
-          <Button className="bg-secondary-foreground hover:bg-secondary mt-10">
-            View More
-          </Button>
+          <Link href="/accommodation">
+            <Button className="bg-secondary-foreground hover:bg-secondary mt-10">
+              View More
+            </Button>
+          </Link>
         </div>
         <div className="flex flex-col sm:flex-row sm:space-x-8 space-y-4 sm:space-y-0 ">
           <DirectionAwareHover

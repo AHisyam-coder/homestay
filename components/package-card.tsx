@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-interface ProductCardProps {
+interface PackageCardProps {
   imageSrc: string;
   roomName: string;
   location: string;
@@ -10,7 +10,7 @@ interface ProductCardProps {
   rating: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const PackageCard: React.FC<PackageCardProps> = ({
   imageSrc,
   roomName,
   location,
@@ -65,4 +65,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-export default ProductCard;
+export default PackageCard;

@@ -1,3 +1,4 @@
+import PackageCard from "@/components/package-card";
 import ProductCard from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +11,28 @@ export default function Accommodation() {
       title: "Rooms",
       value: "rooms",
       content: (
-        <div className="w-full overflow-hidden relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-primary to-secondary">
-          <ProductCard/>
+        <div className="w-full relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-primary to-secondary grid grid-cols-1 md:grid-cols-3 md:overflow-hidden overflow-y-auto">
+          <ProductCard
+            imageSrc="/saba2.jpg"
+            roomName="Family Suite"
+            location="Shah Alam, Selangor"
+            price="RM330"
+            rating={4.9}
+          />
+          <ProductCard
+            imageSrc="/saba5.jpg"
+            roomName="Quad Room"
+            location="Shah Alam, Selangor"
+            price="RM230"
+            rating={4.9}
+          />
+          <ProductCard
+            imageSrc="/saba6.jpg"
+            roomName="Standard Room"
+            location="Shah Alam, Selangor"
+            price="RM130"
+            rating={4.9}
+          />
         </div>
       ),
     },
@@ -19,8 +40,28 @@ export default function Accommodation() {
       title: "Packages",
       value: "packages",
       content: (
-        <div className="w-full overflow-hidden relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-primary to-secondary">
-          <p>Packages tab</p>
+        <div className="w-full relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-primary to-secondary grid grid-cols-1 md:grid-cols-3 md:overflow-hidden overflow-y-auto">
+          <PackageCard
+            imageSrc="/saba1.jpg"
+            roomName="Family Day Package"
+            location="Shah Alam, Selangor"
+            price="RM5,000"
+            rating={4.9}
+          />
+          <PackageCard
+            imageSrc="/saba1.jpg"
+            roomName="Wedding Package"
+            location="Shah Alam, Selangor"
+            price="RM5,000"
+            rating={4.9}
+          />
+          <PackageCard
+            imageSrc="/saba1.jpg"
+            roomName="Gathering Package"
+            location="Shah Alam, Selangor"
+            price="RM5,000"
+            rating={4.9}
+          />
         </div>
       ),
     },

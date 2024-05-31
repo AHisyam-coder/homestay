@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function HeaderInfo() {
   return (
-    <div className="flex flex-col justify-center items-center md:flex-row md:justify-around ">
+    <div className="flex flex-col justify-center items-center md:flex-row md:justify-around">
       <div className=" grid grid-cols-3 items-center gap-4">
         <div className="flex items-center justify-center col-span-1">
           <div className="flex items-center justify-center w-12 h-12 border-2 border-secondary rounded-full">
