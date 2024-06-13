@@ -1,18 +1,38 @@
 import { Tabs } from "@/components/ui/tabs";
 import { Star } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import MultiColReviews from "@/components/multicol-review";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useRouter } from "next/router";
+import { loadStripe } from "@stripe/stripe-js";
+import { useForm } from "react-hook-form";
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { GetServerSideProps } from "next";
+import { supabase } from '@/utils/supabase'
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+
+interface DateRange {
+  from: string | null;
+  to: string | null;
+}
+
+interface Accomodation {
+  id: number;
+  name: string;
+  location: string;
+  price: number;
+  rating: number;
+  description: string;
+}
 
 const product = {
-  name: "Family Suite Room",
-  price: "RM330/night",
-  description:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   highlights: [
     "Hygiene at finest",
     "3000x3000ft room",
@@ -24,16 +44,137 @@ const product = {
 };
 const reviews = { href: "#", average: 5, totalCount: 117 };
 
+
+
+const images = [
+  '/saba1.jpg',
+  '/saba2.jpg',
+  '/saba3.jpg',
+];
+
+const states = [
+  "Johor",
+  "Kedah",
+  "Kelantan",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Perak",
+  "Perlis",
+  "Pulau Pinang",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+  "Kuala Lumpur",
+  "Labuan",
+  "Sabah",
+  "Putrajaya",
+];
+
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+export default function Booking() {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [range, setRange] = useState<DateRange>({ from: null, to: null });
+  const [nights, setNights] = useState(0);
+  const [location, setLocation] = useState('');
+  const [accomodation, setAccomodation] = useState<Accomodation | null>(null);
 
   const handleThumbnailClick = (index: any) => {
     setCurrentIndex(index);
   };
+
+  const handleDateRangeUpdate = (range: any) => {
+    setRange(range.range);
+  };
+
+  useEffect(() => {
+    const calculateNights = (): number => {
+      if (!range.from || !range.to) return 0;
+      const start = new Date(range.from).getTime();
+      const end = new Date(range.to).getTime();
+      const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+      return diff;
+    };
+
+    const nights = calculateNights();
+    setNights(nights);
+  }, [range]);
+
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (accomodation) {
+      const amount = nights * accomodation?.price;
+
+      if (amount !== 0) {
+        const stripe = await stripePromise;
+        const response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ amount }),
+        });
+
+        const session = await response.json();
+
+        if (stripe)
+          await stripe.redirectToCheckout({ sessionId: session.id });
+      } else {
+        alert("Please choose date range at least one night.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    async function getAccomodation() {
+      if (id) {
+        const { data, error } = await supabase
+          .from('accomodations')
+          .select('*')
+          .eq('id', id)
+          .throwOnError()
+          .single()
+
+        if (error) {
+          console.error('Error fetching accomodation:', error);
+        } else {
+          setAccomodation(data);
+        }
+      }
+    }
+
+    getAccomodation();
+  }, [id]);
+
+  if (!accomodation) {
+    return (
+      <div >
+        <div className="pt-6">
+          {/* Image gallery */}
+          <div className="flex flex-col items-center">
+            <Skeleton className="relative w-full max-h-96 max-w-2xl lg:max-w-7xl overflow-hidden" />
+            <Skeleton className="mt-4 flex space-x-2" />
+          </div>
+
+          <Skeleton className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+            <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+              {/* Description and details */}
+              <Skeleton className="h-[20rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full items-start justify-start " />
+            </div>
+          </Skeleton>
+        </div>
+      </div>
+    )
+  }
 
   const tabs = [
     {
@@ -44,7 +185,7 @@ export default function Example() {
           <div>
             <h3 className="sr-only">Description</h3>
             <div className="space-y-6">
-              <p className="text-base">{product.description}</p>
+              <p className="text-base">{accomodation?.description}</p>
             </div>
           </div>
 
@@ -80,32 +221,6 @@ export default function Example() {
       ),
     },
   ];
-
-  const images = [
-    '/saba1.jpg',
-    '/saba2.jpg',
-    '/saba3.jpg',
-  ];
-
-  const states = [
-    "Johor",
-    "Kedah",
-    "Kelantan",
-    "Melaka",
-    "Negeri Sembilan",
-    "Pahang",
-    "Perak",
-    "Perlis",
-    "Pulau Pinang",
-    "Sarawak",
-    "Selangor",
-    "Terengganu",
-    "Kuala Lumpur",
-    "Labuan",
-    "Sabah",
-    "Putrajaya",
-  ];
-
 
   return (
     <div className="bg-white">
@@ -173,7 +288,7 @@ export default function Example() {
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              {product.name}
+              {accomodation.name}
             </h1>
           </div>
 
@@ -181,7 +296,7 @@ export default function Example() {
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-gray-900">
-              {product.price}
+              RM{accomodation.price}/night
             </p>
 
             {/* Reviews */}
@@ -193,8 +308,8 @@ export default function Example() {
                     <Star
                       key={rating}
                       className={classNames(
-                        reviews.average > rating
-                          ? "text-gray-900"
+                        accomodation.rating > rating
+                          ? "text-yellow-500"
                           : "text-gray-200",
                         "h-5 w-5 flex-shrink-0"
                       )}
@@ -202,58 +317,62 @@ export default function Example() {
                     />
                   ))}
                 </div>
-                <p className="sr-only">{reviews.average} out of 5 stars</p>
+                <p className="sr-only">{accomodation.rating} out of 5 stars</p>
                 <span
                   className="ml-3 text-sm font-medium text-primary hover:text-secondary"
                 >
-                  {reviews.totalCount} reviews
+                  {accomodation.rating} out of 5 stars
                 </span>
               </div>
             </div>
 
-            <form className="mt-10">
-              <div className="flex flex-col justify-between space-y-5">
-                <div className="mt-10 space-y-5 md:space-y-0">
-                  <div className="flex flex-col md:flex-row items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-900 mb-2 md:mb-0">Location</h3>
-                    <div className="w-full md:w-auto">
-                      <Select>
-                        <SelectTrigger className="w-full md:w-[228.13px] h-[44px]">
-                          <SelectValue placeholder="Location" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {states.map((state) => (
-                            <SelectItem key={state} value={state}>
-                              {state}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+            <div className="mt-10">
+              <form onSubmit={handleSubmit}>
+                <div className="flex flex-col justify-between space-y-5">
+                  <div className="mt-10 space-y-5 md:space-y-0">
+                    <div className="flex flex-col md:flex-row items-center justify-between">
+                      <h3 className="text-sm font-medium text-gray-900 mb-2 md:mb-0">Location</h3>
+                      <div className="w-full md:w-auto">
+                        {accomodation.location ? (
+                          <Input disabled placeholder="Location" value={accomodation.location} />)
+                          : (
+                            <Select onValueChange={setLocation}>
+                              <SelectTrigger className="w-full md:w-[228.13px] h-[44px]">
+                                <SelectValue placeholder="Location" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {states.map((state) => (
+                                  <SelectItem key={state} value={state}>
+                                    {state}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>)}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="mt-5 space-y-5 md:space-y-0">
-                  <div className="flex flex-col md:flex-row items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-900 mb-2 md:mb-0">Check-in/Check-out</h3>
-                    <div className="w-full md:w-auto">
-                      <div className="flex justify-center w-full md:w-[228.13px] h-[44px]">
-                        <DateRangePicker />
+                  <div className="mt-5 space-y-5 md:space-y-0">
+                    <div className="flex flex-col md:flex-row items-center justify-between">
+                      <h3 className="text-sm font-medium text-gray-900 mb-2 md:mb-0">Check-in/Check-out</h3>
+                      <div className="w-full md:w-auto">
+                        <div className="flex justify-center w-full md:w-[228.13px] h-[44px]">
+                          <DateRangePicker onUpdate={handleDateRangeUpdate} />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
+                <Button
+                  type="submit"
+                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary-foreground focus:ring-offset-2"
+                >
+                  Book
+                </Button>
+              </form>
+            </div>
 
-
-              <Button
-                type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary-foreground focus:ring-offset-2"
-              >
-                Book
-              </Button>
-            </form>
           </div>
 
           <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">

@@ -2,37 +2,51 @@ import PackageCard from "@/components/package-card";
 import ProductCard from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs } from "@/components/ui/tabs";
-import { CookingPot, LucideSquareMenu } from "lucide-react";
+import { supabase } from "@/utils/supabase";
+import { useEffect, useState } from "react";
 
 export default function Accommodation() {
+  const [accomodations, setAccomodations] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function getAccomodation() {
+      const { data, error } = await supabase
+        .from('accomodations')
+        .select('*')
+        .throwOnError()
+
+      if (error) {
+        console.error('Error fetching accomodation:', error);
+      } else {
+        setAccomodations(data);
+      }
+    }
+
+    getAccomodation();
+  }, []);
+
+  const rooms = accomodations.filter(x => x.type === "room");
+  const packages = accomodations.filter(x => x.type === "package");
+
   const tabs = [
     {
       title: "Rooms",
       value: "rooms",
       content: (
         <div className="w-full relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-primary to-secondary grid grid-cols-1 md:grid-cols-3 md:overflow-hidden overflow-y-auto">
-          <ProductCard
-            imageSrc="/saba2.jpg"
-            roomName="Family Suite"
-            location="Shah Alam, Selangor"
-            price="RM330"
-            rating={4.9}
-          />
-          <ProductCard
-            imageSrc="/saba5.jpg"
-            roomName="Quad Room"
-            location="Shah Alam, Selangor"
-            price="RM230"
-            rating={4.9}
-          />
-          <ProductCard
-            imageSrc="/saba6.jpg"
-            roomName="Standard Room"
-            location="Shah Alam, Selangor"
-            price="RM130"
-            rating={4.9}
-          />
+          {rooms.map(room => (
+            <ProductCard
+              key={room.id}
+              id={room.id}
+              imageSrc={`/${room.image_name}`}
+              roomName={room.name}
+              location={room.location}
+              price={`RM${room.price}`}
+              rating={room.rating}
+            />
+          ))}
         </div>
       ),
     },
@@ -41,31 +55,39 @@ export default function Accommodation() {
       value: "packages",
       content: (
         <div className="w-full relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-primary to-secondary grid grid-cols-1 md:grid-cols-3 md:overflow-hidden overflow-y-auto">
-          <PackageCard
-            imageSrc="/saba1.jpg"
-            roomName="Family Day Package"
-            location="Shah Alam, Selangor"
-            price="RM5,000"
-            rating={4.9}
-          />
-          <PackageCard
-            imageSrc="/saba1.jpg"
-            roomName="Wedding Package"
-            location="Shah Alam, Selangor"
-            price="RM5,000"
-            rating={4.9}
-          />
-          <PackageCard
-            imageSrc="/saba1.jpg"
-            roomName="Gathering Package"
-            location="Shah Alam, Selangor"
-            price="RM5,000"
-            rating={4.9}
-          />
+          {packages.map(pkg => (
+            <PackageCard
+              key={pkg.id}
+              id={pkg.id}
+              imageSrc={`/${pkg.image_name}`}
+              roomName={pkg.name}
+              location={pkg.location}
+              price={`RM${pkg.price}`}
+              rating={pkg.rating}
+            />
+          ))}
         </div>
       ),
     },
   ];
+
+  if (!accomodations) {
+    return (
+      <div>
+        <Skeleton className="relative isolate overflow-hidden py-16 sm:py-24 lg:py-32 bg-fixed">
+          <div className="absolute inset-0 bg-black/40 z-10"></div>
+          <Skeleton className="relative z-20">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="mx-auto grid max-w-2xl lg:max-w-none flex justify-center">
+
+              </div>
+            </div>
+          </Skeleton>
+        </Skeleton>
+        <Skeleton className="h-[20rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col mx-auto max-w-7xl w-full items-start justify-start mt-10 mb-28" />
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -92,7 +114,7 @@ export default function Accommodation() {
         </div>
       </div>
       <div className="h-[20rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col mx-auto max-w-7xl w-full items-start justify-start mt-10 mb-28">
-        <Tabs tabs={tabs} />
+        {accomodations ? (<Tabs tabs={tabs} />) : (<div></div>)}
       </div>
     </div>
   );

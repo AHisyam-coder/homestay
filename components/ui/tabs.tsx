@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +35,12 @@ export const Tabs = ({
   };
 
   const [hovering, setHovering] = useState(false);
+
+  useEffect(() => {
+    // Ensure the active state is correctly updated if propTabs change
+    setActive(propTabs[0]);
+    setTabs(propTabs);
+  }, [propTabs]);
 
   return (
     <>

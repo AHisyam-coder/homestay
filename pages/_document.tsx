@@ -12,7 +12,7 @@ export default function Document() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Ahmad Hisyam" />
         <meta property="og:type" content="website" />
-        
+
 
         {/* <!-- Google Font --> */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,13 +21,14 @@ export default function Document() {
           href="https://fonts.gstatic.com"
           crossOrigin=""
         />
-        
+
+
       </Head>
       <body>
         <HeaderInfo />
         <Header />
         <Main />
-        <Footer/>
+        <Footer />
         <NextScript />
       </body>
     </Html>

@@ -1,5 +1,6 @@
 import { Mail, Phone } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeaderInfo() {
   return (
@@ -16,7 +17,9 @@ export default function HeaderInfo() {
         </div>
       </div>
       <div className="pt-6 md:pt-0">
-        <Image src="/Home.png" alt="logo" width={150} height={150} />
+        <Link href="/">
+          <Image src="/Home.png" alt="logo" width={150} height={150} />
+        </Link>
       </div>
       <div className="text-center md:text-left">
         <h1 className="text-2xl font-bold text-secondary">+(60) 12-3456789</h1>

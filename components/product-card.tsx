@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 
 interface ProductCardProps {
+  id:number;
   imageSrc: string;
   roomName: string;
   location: string;
@@ -11,6 +12,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
+  id,
   imageSrc,
   roomName,
   location,
@@ -53,7 +55,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </span>
                 <span className="text-slate-400 text-sm">/night</span>
               </p>
-              <Button>Book Now!</Button>
+              <Link href={`/accommodation/${id}`}>
+                <Button>Book Now!</Button>
+              </Link>
             </div>
           </div>
         </article>
