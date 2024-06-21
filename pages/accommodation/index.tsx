@@ -1,7 +1,6 @@
+import Header from "@/components/header";
 import PackageCard from "@/components/package-card";
 import ProductCard from "@/components/product-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs } from "@/components/ui/tabs";
 import { supabase } from "@/utils/supabase";
@@ -91,6 +90,7 @@ export default function Accommodation() {
 
   return (
     <div>
+      <Header/>
       <div
         className="relative isolate overflow-hidden py-16 sm:py-24 lg:py-32 bg-fixed"
         style={{

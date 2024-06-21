@@ -1,10 +1,5 @@
-
-
-import Image from "next/image";
-import { Piazzolla } from "next/font/google";
 import { ImagesSlider } from "@/components/ui/images-slider";
 import { motion } from "framer-motion";
-import Header from "@/components/header";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import {
   Select,
@@ -23,8 +18,8 @@ import { FeaturedAccomodation } from "@/components/featured-accomodation";
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Badge } from "@/components/ui/badge";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import Header from "@/components/header";
 
 interface DateRange {
   from: string | null;
@@ -155,6 +150,7 @@ export default function Home() {
   return (
     <div>
       <div>
+        <Header/>
         <ImagesSlider className="h-[40rem]" images={images}>
           <motion.div
             initial={{

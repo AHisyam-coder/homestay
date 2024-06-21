@@ -7,17 +7,13 @@ import MultiColReviews from "@/components/multicol-review";
 import { Button } from "@/components/ui/button";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRouter } from "next/router";
 import { loadStripe } from "@stripe/stripe-js";
-import { useForm } from "react-hook-form";
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { GetServerSideProps } from "next";
 import { supabase } from '@/utils/supabase'
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import Header from "@/components/header";
 
 interface DateRange {
   from: string | null;
@@ -230,6 +226,7 @@ export default function Booking() {
 
   return (
     <div className="bg-white">
+      <Header/>
       <div
         className="relative isolate overflow-hidden py-16 sm:py-24 lg:py-32 bg-fixed"
         style={{

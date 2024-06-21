@@ -1,3 +1,5 @@
+"use client";
+
 import { MenuIcon, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,16 +48,7 @@ const Header: NextPage = () => {
         <DrawerOverlay />
         <DrawerContent className="fixed inset-y-0 right-0 z-50 w-full max-w-sm p-6 overflow-y-auto bg-white sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between mb-4">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <Image
-                className="h-8 w-auto"
-                src="/your-logo.svg"
-                alt="Your Company Logo"
-                width={32}
-                height={32}
-              />
-            </Link>
+            <div></div>
             <DrawerClose asChild>
               <button
                 type="button"

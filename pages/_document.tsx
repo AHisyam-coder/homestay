@@ -13,20 +13,17 @@ export default function Document() {
         <meta name="author" content="Ahmad Hisyam" />
         <meta property="og:type" content="website" />
 
-
-        {/* <!-- Google Font --> */}
+        {/* Google Font */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin=""
         />
-
-
       </Head>
       <body>
         <HeaderInfo />
-        <Header />
+        {/* <Header /> */}
         <Main />
         <Footer />
         <NextScript />
