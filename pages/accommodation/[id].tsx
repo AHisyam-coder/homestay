@@ -17,6 +17,7 @@ import { GetServerSideProps } from "next";
 import { supabase } from '@/utils/supabase'
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DateRange {
   from: string | null;
@@ -78,6 +79,7 @@ function classNames(...classes: any[]) {
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function Booking() {
+  const { toast } = useToast();
   const router = useRouter();
   const { id } = router.query;
 
@@ -129,7 +131,11 @@ export default function Booking() {
         if (stripe)
           await stripe.redirectToCheckout({ sessionId: session.id });
       } else {
-        alert("Please choose date range at least one night.");
+        toast({
+          variant: "destructive",
+          title: "Missing date range",
+          description: "Please choose a date range of at least one night!",
+        });
       }
     }
   };

@@ -1,3 +1,5 @@
+import { ToastProvider } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Piazzolla } from "next/font/google";
@@ -11,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={piazzolla.className}>
       <Component {...pageProps} />
+      <Toaster />
     </div>
   );
 }
